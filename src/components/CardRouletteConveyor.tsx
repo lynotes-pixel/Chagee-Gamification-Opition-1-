@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { TeaCard, GamePhase } from '../types';
 import { CHAGEE_MENU_CARDS } from '../data/chageeMenu';
 import { TeaCupVisual } from './TeaCupVisual';
-import { Play, Square, Sparkles, RefreshCw, Zap, MoveDown, Hand, GripHorizontal, Check } from 'lucide-react';
+import { Play, Square, Sparkles, RefreshCw, Zap, MoveDown, Hand, GripHorizontal, Check, ArrowDown } from 'lucide-react';
 import { sounds } from '../utils/audio';
 
 interface CardRouletteConveyorProps {
@@ -34,11 +34,16 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
   const [draggedCardId, setDraggedCardId] = useState<string | null>(null);
   const audioIntervalRef = useRef<any>(null);
 
-  // Single-row conveyor ribbon for running animation
-  const conveyorRibbon = [
-    ...CHAGEE_MENU_CARDS,
-    ...CHAGEE_MENU_CARDS,
-    ...CHAGEE_MENU_CARDS,
+  // Two columns of running vertical ribbons for top-down conveyor animation
+  const column1Cards = [
+    ...CHAGEE_MENU_CARDS.slice(0, 6),
+    ...CHAGEE_MENU_CARDS.slice(0, 6),
+    ...CHAGEE_MENU_CARDS.slice(0, 6),
+  ];
+  const column2Cards = [
+    ...CHAGEE_MENU_CARDS.slice(6, 12),
+    ...CHAGEE_MENU_CARDS.slice(6, 12),
+    ...CHAGEE_MENU_CARDS.slice(6, 12),
   ];
 
   useEffect(() => {
@@ -89,7 +94,7 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
       const primarySelection = pool.slice(0, 5);
       const extraCard = pool[Math.floor(Math.random() * pool.length)];
 
-      // Form 6 drawn cards with unique IDs
+      // Form 6 drawn cards with unique IDs (ordered for 2 columns x 3 rows grid)
       const finalRolled = [...primarySelection, extraCard].map((c, index) => ({
         ...c,
         id: `${c.id}-rolled-${index}-${Date.now()}`,
@@ -138,16 +143,16 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
           </span>
           <div>
             <h2 className="font-serif-sc text-sm sm:text-base md:text-lg font-bold tracking-wide text-[#F3E5AB]">
-              Tea Roulette Conveyor
+              Top-Down Tea Roulette Conveyor (2 Cols × 3 Rows)
             </h2>
             <p className="text-[10px] sm:text-[11px] text-[#A0AEC0]">
               {phase === 'spinning'
-                ? 'Cards are racing! Tap STOP to freeze 6 cards (2 cols × 3 rows).'
+                ? 'Conveyors running top-to-bottom! Tap STOP to freeze 6 cards in 2 columns & 3 rows.'
                 : phase === 'stopping'
-                ? 'Decelerating conveyor... Freezing 6 tea cards on screen!'
+                ? 'Decelerating top-down conveyors... Freezing 6 cards in place!'
                 : phase === 'selecting'
                 ? 'Conveyor frozen! Drag & drop cards from the 6 cards below into your recipe slots.'
-                : 'Watch the continuous conveyor stream and tap PLAY to begin.'}
+                : 'Conveyors cascade downward in 2 columns. Tap PLAY to start spinning!'}
             </p>
           </div>
         </div>
@@ -156,15 +161,15 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
         <div className="flex items-center gap-1.5">
           {phase === 'spinning' ? (
             <span className="inline-flex items-center gap-1 rounded-full bg-[#E53E3E] px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-bold text-white shadow-lg animate-pulse">
-              <Zap className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> High-Speed Rush
+              <Zap className="h-3 w-3 sm:h-3.5 sm:w-3.5" /> 2-Column Cascade (Running Down)
             </span>
           ) : phase === 'stopping' ? (
             <span className="inline-flex items-center gap-1 rounded-full bg-[#D4AF37] px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-bold text-[#0C152B]">
-              <RefreshCw className="h-3 w-3 sm:h-3.5 sm:w-3.5 animate-spin" /> Freezing Cards...
+              <RefreshCw className="h-3 w-3 sm:h-3.5 sm:w-3.5 animate-spin" /> Freezing 6 Cards...
             </span>
           ) : phase === 'selecting' ? (
             <span className="inline-flex items-center gap-1 rounded-full border border-[#D4AF37] bg-[#1A2E56] px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-bold text-[#F3E5AB] shadow-md shadow-[#D4AF37]/20">
-              <Hand className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#D4AF37]" /> 6 Cards Frozen (2×3 Grid)
+              <Hand className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-[#D4AF37]" /> 6 Cards Frozen (2 Cols × 3 Rows)
             </span>
           ) : (
             <span className="inline-flex items-center gap-1 rounded-full border border-[#D4AF37]/40 bg-[#162347] px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs text-[#CBD5E0]">
@@ -174,29 +179,30 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
         </div>
       </div>
 
-      {/* Conveyor Area: 2 Columns x 3 Rows on Mobile, Nicely Sized */}
+      {/* Conveyor Area: 2 Columns x 3 Rows, running top-to-bottom */}
       <div className="relative my-2 rounded-xl border border-[#D4AF37]/40 bg-[#070D1C] p-2.5 sm:p-3.5 shadow-inner">
+        {/* Top and Bottom Fades for top-down conveyor window */}
         {!isFrozen && (
           <>
-            <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-12 bg-gradient-to-r from-[#070D1C] via-[#070D1C]/80 to-transparent" />
-            <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-12 bg-gradient-to-l from-[#070D1C] via-[#070D1C]/80 to-transparent" />
+            <div className="pointer-events-none absolute left-0 top-0 z-10 h-10 w-full bg-gradient-to-b from-[#070D1C] via-[#070D1C]/90 to-transparent" />
+            <div className="pointer-events-none absolute bottom-0 left-0 z-10 h-10 w-full bg-gradient-to-t from-[#070D1C] via-[#070D1C]/90 to-transparent" />
           </>
         )}
 
         {isFrozen ? (
-          /* FROZEN 6 CARDS IN 2 COLUMNS AND 3 ROWS (MOBILE OPTIMIZED) */
+          /* FROZEN 6 CARDS IN 2 COLUMNS AND 3 ROWS */
           <div>
             <div className="mb-2 flex items-center justify-between px-1">
               <span className="font-serif-sc text-xs font-semibold text-[#D4AF37]/90 flex items-center gap-1.5">
                 <span className="inline-block h-2 w-2 rounded-full bg-[#D4AF37] animate-pulse"></span>
-                6 Frozen Tea Cards (2 Columns × 3 Rows)
+                Frozen Cards (2 Columns × 3 Rows)
               </span>
               <span className="text-[10px] text-[#A0AEC0] flex items-center gap-1">
                 <GripHorizontal className="h-3 w-3 text-[#D4AF37]" /> Drag or tap card to place
               </span>
             </div>
 
-            {/* 2 Columns x 3 Rows Responsive Layout (Perfect Mobile Fit) */}
+            {/* Exact 2 Columns x 3 Rows Grid */}
             <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
               {rolledCards.map((card, colIdx) => {
                 const placedSlot = getPlacedSlotNumber(card.id);
@@ -213,7 +219,7 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
                       sounds.playCardSelect();
                       onToggleCard(card);
                     }}
-                    className={`group relative flex cursor-grab active:cursor-grabbing items-center justify-between rounded-xl border p-2 sm:p-2.5 text-left transition-all duration-200 select-none min-h-[92px] sm:min-h-[100px] ${
+                    className={`group relative flex cursor-grab active:cursor-grabbing items-center justify-between rounded-xl border p-2 sm:p-2.5 text-left transition-all duration-200 select-none min-h-[90px] sm:min-h-[98px] ${
                       isDraggingThis ? 'opacity-40 scale-95 border-dashed border-[#D4AF37]' : ''
                     } ${
                       placedSlot !== null
@@ -271,48 +277,93 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
             </div>
           </div>
         ) : (
-          /* RUNNING STREAM CONVEYOR ROW */
-          <div className="overflow-hidden py-1">
-            <div
-              className={`flex w-max gap-2.5 transition-all ${
-                activeSpeed === 'hyperspeed'
-                  ? 'animate-fast-marquee-blur'
-                  : activeSpeed === 'stopping'
-                  ? 'transition-transform duration-1000 ease-out'
-                  : 'animate-fast-marquee'
-              }`}
-              style={{
-                animationDuration: activeSpeed === 'hyperspeed' ? '2.2s' : activeSpeed === 'stopping' ? '5s' : '8.5s',
-              }}
-            >
-              {conveyorRibbon.map((card, idx) => (
+          /* RUNNING 2 COLUMNS OF CONVEYORS MOVING TOP-TO-BOTTOM (3 VISIBLE ROWS TALL) */
+          <div>
+            <div className="mb-1.5 flex items-center justify-between px-1 text-[10px] text-[#A0AEC0]">
+              <span className="flex items-center gap-1 text-[#D4AF37]">
+                <ArrowDown className="h-3 w-3 animate-bounce" /> Cascade Column A
+              </span>
+              <span className="font-mono text-[9px] text-[#CBD5E0]">3 Visible Rows</span>
+              <span className="flex items-center gap-1 text-[#D4AF37]">
+                <ArrowDown className="h-3 w-3 animate-bounce" /> Cascade Column B
+              </span>
+            </div>
+
+            {/* 2-Column Vertical Overflow Window displaying 3 visible rows (~280px tall) */}
+            <div className="grid grid-cols-2 gap-2 sm:gap-2.5 h-[280px] sm:h-[300px] overflow-hidden rounded-lg bg-[#050A14] p-1.5 border border-[#1A284D]">
+              {/* Column 1 Vertical Conveyor */}
+              <div className="overflow-hidden relative h-full rounded-md border border-[#D4AF37]/20 bg-[#080E1C]/80">
                 <div
-                  key={`ribbon-${card.id}-${idx}`}
-                  className="flex h-[135px] w-[120px] sm:w-[135px] shrink-0 flex-col items-center justify-between rounded-xl border border-[#D4AF37]/40 bg-gradient-to-b from-[#162547] via-[#0F1B35] to-[#0A1224] p-2 text-center shadow-md"
+                  className={`flex flex-col gap-2 ${
+                    activeSpeed === 'hyperspeed'
+                      ? 'animate-vertical-conveyor-fast'
+                      : activeSpeed === 'stopping'
+                      ? 'transition-transform duration-1000 ease-out'
+                      : 'animate-vertical-conveyor'
+                  }`}
                 >
-                  <div className="w-full flex items-center justify-between text-[9px]">
-                    <span className="rounded bg-[#A81D24] px-1.5 py-0.5 font-serif-sc font-bold text-[#FFFDF0]">
-                      {card.chineseName.slice(0, 2)}
-                    </span>
-                    <span className="font-mono font-bold text-[#E5C158]">
-                      +{card.pointsValue}p
-                    </span>
-                  </div>
-
-                  <div className="scale-75 -my-1">
-                    <TeaCupVisual card={card} size="sm" compact />
-                  </div>
-
-                  <div className="w-full">
-                    <p className="truncate font-serif-sc text-xs font-bold text-[#FFFDF0]">
-                      {card.chineseName}
-                    </p>
-                    <p className="truncate text-[9px] text-[#CBD5E0]">
-                      {card.name}
-                    </p>
-                  </div>
+                  {column1Cards.map((card, idx) => (
+                    <div
+                      key={`col1-${card.id}-${idx}`}
+                      className="flex h-[88px] shrink-0 items-center justify-between rounded-lg border border-[#D4AF37]/30 bg-gradient-to-r from-[#162547] via-[#0F1B35] to-[#0A1224] p-2 shadow-sm"
+                    >
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <div className="scale-75 -my-2 -mx-1">
+                          <TeaCupVisual card={card} size="sm" compact />
+                        </div>
+                      </div>
+                      <div className="min-w-0 flex-1 px-1">
+                        <p className="truncate font-serif-sc text-xs font-bold text-[#FFFDF0]">
+                          {card.chineseName}
+                        </p>
+                        <p className="truncate text-[8px] text-[#CBD5E0]">
+                          {card.name}
+                        </p>
+                      </div>
+                      <span className="font-mono text-[9px] font-bold text-[#E5C158] shrink-0">
+                        +{card.pointsValue}p
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+
+              {/* Column 2 Vertical Conveyor */}
+              <div className="overflow-hidden relative h-full rounded-md border border-[#D4AF37]/20 bg-[#080E1C]/80">
+                <div
+                  className={`flex flex-col gap-2 ${
+                    activeSpeed === 'hyperspeed'
+                      ? 'animate-vertical-conveyor-alt-fast'
+                      : activeSpeed === 'stopping'
+                      ? 'transition-transform duration-1000 ease-out'
+                      : 'animate-vertical-conveyor-alt'
+                  }`}
+                >
+                  {column2Cards.map((card, idx) => (
+                    <div
+                      key={`col2-${card.id}-${idx}`}
+                      className="flex h-[88px] shrink-0 items-center justify-between rounded-lg border border-[#D4AF37]/30 bg-gradient-to-r from-[#162547] via-[#0F1B35] to-[#0A1224] p-2 shadow-sm"
+                    >
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        <div className="scale-75 -my-2 -mx-1">
+                          <TeaCupVisual card={card} size="sm" compact />
+                        </div>
+                      </div>
+                      <div className="min-w-0 flex-1 px-1">
+                        <p className="truncate font-serif-sc text-xs font-bold text-[#FFFDF0]">
+                          {card.chineseName}
+                        </p>
+                        <p className="truncate text-[8px] text-[#CBD5E0]">
+                          {card.name}
+                        </p>
+                      </div>
+                      <span className="font-mono text-[9px] font-bold text-[#E5C158] shrink-0">
+                        +{card.pointsValue}p
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -327,9 +378,9 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
             className="group relative flex items-center justify-center gap-2.5 rounded-2xl border-2 border-[#F3E5AB] bg-gradient-to-r from-[#A81D24] via-[#E53E3E] to-[#8C141B] px-8 py-3 sm:px-12 sm:py-3.5 text-base sm:text-lg font-bold tracking-wider text-white shadow-2xl shadow-[#E53E3E]/60 transition-all duration-200 hover:scale-105 active:scale-95 glow-gold"
           >
             <Square className="h-5 w-5 fill-current text-white animate-pulse" />
-            <span className="font-cinzel tracking-widest">STOP CARDS!</span>
+            <span className="font-cinzel tracking-widest">STOP CONVEYOR!</span>
             <span className="rounded bg-white/20 px-2 py-0.5 text-xs font-semibold uppercase">
-              Freeze 6 Cards
+              Freeze 2×3 Grid
             </span>
           </button>
         ) : phase === 'stopping' ? (
@@ -338,7 +389,7 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
             className="flex items-center justify-center gap-2.5 rounded-2xl border border-[#D4AF37]/50 bg-[#1A2544] px-7 py-3 text-sm font-bold text-[#F3E5AB]"
           >
             <RefreshCw className="h-4 w-4 animate-spin text-[#D4AF37]" />
-            <span>Freezing 6 Cards (2×3 Grid)...</span>
+            <span>Freezing 6 Cards (2 Cols × 3 Rows)...</span>
           </button>
         ) : (
           <div className="flex flex-wrap items-center justify-center gap-3">

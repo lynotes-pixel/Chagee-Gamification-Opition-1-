@@ -32,6 +32,33 @@
   filter: blur(1.5px);
 }
 
+@keyframes vertical-conveyor-down {
+  0% {
+    transform: translateY(-50%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+.animate-vertical-conveyor {
+  animation: vertical-conveyor-down 5s linear infinite;
+}
+
+.animate-vertical-conveyor-fast {
+  animation: vertical-conveyor-down 1.4s linear infinite;
+  filter: blur(0.8px);
+}
+
+.animate-vertical-conveyor-alt {
+  animation: vertical-conveyor-down 5.4s linear infinite;
+}
+
+.animate-vertical-conveyor-alt-fast {
+  animation: vertical-conveyor-down 1.5s linear infinite;
+  filter: blur(0.8px);
+}
+
 @keyframes gold-pulse {
   0%, 100% {
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.4), inset 0 0 10px rgba(212, 175, 55, 0.2);
