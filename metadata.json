@@ -1,0 +1,6 @@
+{
+  "name": "CHAGEE Tea Rush Gamification",
+  "description": "CHAGEE-themed gamification app with 9-point token redemption, dynamic tea card roulette carousel, 6-card recipe combination submission, and prize rewards.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
