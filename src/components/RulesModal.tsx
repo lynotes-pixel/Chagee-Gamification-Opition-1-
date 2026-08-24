@@ -68,10 +68,10 @@ export const RulesModal: React.FC<RulesModalProps> = ({ isOpen, onClose }) => {
               <div className="rounded-xl border border-[#D4AF37]/30 bg-[#0E1A35] p-3.5">
                 <div className="flex items-center gap-2 font-bold text-[#F3E5AB]">
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#A81D24] text-xs text-white">3</span>
-                  <span>Tap STOP to Freeze 8 Cards</span>
+                  <span>Tap STOP to Freeze 6 Cards</span>
                 </div>
                 <p className="mt-1.5 text-xs text-[#CBD5E0]">
-                  Tap the button to decelerate the running conveyor. The single conveyor belt halts to freeze 8 cards directly in place.
+                  Tap the button to decelerate the running conveyor. The conveyor halts to freeze 6 cards in a clean 2×3 mobile-friendly grid.
                 </p>
               </div>
 

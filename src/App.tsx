@@ -110,12 +110,12 @@ export default function App() {
     setPhase('spinning');
   };
 
-  // (3) Stop Spinning Conveyor & Freeze 8 Rolled Cards on Conveyor
+  // (3) Stop Spinning Conveyor & Freeze 6 Rolled Cards on Conveyor (2x3 grid)
   const handleStopSpin = (cards: TeaCard[]) => {
     setRolledCards(cards);
     setSlots([null, null, null, null]);
     setPhase('selecting');
-    showToast('8 Cards Frozen on Conveyor! Drag cards into the 4 combination slots.');
+    showToast('6 Cards Frozen on Conveyor! Drag cards into the 4 combination slots.');
   };
 
   // Toggle selection of a card (e.g. on click)
@@ -336,7 +336,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Step 2 & 3: High-Speed 1-Row Card Roulette Conveyor with Frozen 8 Cards */}
+        {/* Step 2 & 3: High-Speed Card Roulette Conveyor with Frozen 6 Cards (2x3 grid) */}
         <CardRouletteConveyor
           phase={phase}
           rolledCards={rolledCards}
