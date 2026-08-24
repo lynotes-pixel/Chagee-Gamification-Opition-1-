@@ -244,20 +244,20 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
                     </div>
 
                     {/* Bottom: Text placed cleanly at the bottom of the cup image */}
-                    <div className="w-full rounded-lg bg-[#070D1C]/90 p-2 border border-[#D4AF37]/20 pointer-events-none mt-1">
-                      {/* Chinese Name - Large, High Contrast, Crystal Clear */}
-                      <p className="font-serif-sc text-sm sm:text-base font-bold text-[#FFFDF0] tracking-wide line-clamp-1">
+                    <div className="w-full rounded-lg bg-[#070D1C]/90 px-2 py-1.5 border border-[#D4AF37]/20 pointer-events-none mt-1">
+                      {/* Chinese Name - Crisp, High Contrast */}
+                      <p className="font-serif-sc text-xs sm:text-sm font-bold text-[#FFFDF0] tracking-wide truncate">
                         {card.chineseName}
                       </p>
 
-                      {/* English Name - Crisp, Highly Legible */}
-                      <p className="text-xs sm:text-[13px] font-medium text-[#E2E8F0] line-clamp-1 mt-0.5">
+                      {/* English Name - Balanced size so it's readable at a glance without clipping */}
+                      <p className="text-[10px] sm:text-[11px] font-medium text-[#CBD5E0] truncate mt-0.5 leading-tight">
                         {card.name}
                       </p>
 
                       {/* Aroma / Tea Base Tag */}
                       <div className="mt-1 flex items-center justify-center gap-1">
-                        <span className="rounded bg-[#1A2E56] px-1.5 py-0.5 text-[10px] font-semibold text-[#F3E5AB] truncate max-w-full">
+                        <span className="rounded bg-[#1A2E56] px-1.5 py-0.5 text-[9px] font-semibold text-[#F3E5AB] truncate max-w-full">
                           {card.teaBase}
                         </span>
                       </div>
@@ -331,11 +331,11 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
                       </div>
 
                       {/* Bottom: Text below cup image */}
-                      <div className="w-full rounded-md bg-[#070D1C]/90 p-1.5 border border-[#D4AF37]/20">
-                        <p className="truncate font-serif-sc text-xs sm:text-sm font-bold text-[#FFFDF0]">
+                      <div className="w-full rounded-md bg-[#070D1C]/90 px-1.5 py-1 border border-[#D4AF37]/20">
+                        <p className="truncate font-serif-sc text-xs font-bold text-[#FFFDF0]">
                           {card.chineseName}
                         </p>
-                        <p className="truncate text-[10px] sm:text-xs font-medium text-[#E2E8F0]">
+                        <p className="truncate text-[10px] font-medium text-[#CBD5E0] mt-0.5 leading-tight">
                           {card.name}
                         </p>
                       </div>
@@ -376,11 +376,11 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
                       </div>
 
                       {/* Bottom: Text below cup image */}
-                      <div className="w-full rounded-md bg-[#070D1C]/90 p-1.5 border border-[#D4AF37]/20">
-                        <p className="truncate font-serif-sc text-xs sm:text-sm font-bold text-[#FFFDF0]">
+                      <div className="w-full rounded-md bg-[#070D1C]/90 px-1.5 py-1 border border-[#D4AF37]/20">
+                        <p className="truncate font-serif-sc text-xs font-bold text-[#FFFDF0]">
                           {card.chineseName}
                         </p>
-                        <p className="truncate text-[10px] sm:text-xs font-medium text-[#E2E8F0]">
+                        <p className="truncate text-[10px] font-medium text-[#CBD5E0] mt-0.5 leading-tight">
                           {card.name}
                         </p>
                       </div>
