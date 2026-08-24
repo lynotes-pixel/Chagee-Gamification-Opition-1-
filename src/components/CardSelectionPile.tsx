@@ -120,7 +120,7 @@ export const CardSelectionPile: React.FC<CardSelectionPileProps> = ({
                 4-Card Combination Slots
               </h3>
               <p className="text-xs text-[#CBD5E0]">
-                Drag cards from the 8-card conveyor into the 4 slots below (or tap any card on conveyor).
+                Drag cards from the 6-card conveyor into the 4 slots below (or tap any card on conveyor).
               </p>
             </div>
           </div>
@@ -213,11 +213,11 @@ export const CardSelectionPile: React.FC<CardSelectionPileProps> = ({
                       <TeaCupVisual card={card} size="sm" compact />
                     </div>
 
-                    <div className="w-full pointer-events-none mt-1">
-                      <p className="truncate font-serif-sc text-sm font-bold text-[#F3E5AB]">
+                    <div className="w-full pointer-events-none mt-1 rounded-md bg-[#070D1C]/80 px-1 py-1.5 border border-[#D4AF37]/20">
+                      <p className="truncate font-serif-sc text-sm font-bold text-[#FFFDF0]">
                         {card.chineseName}
                       </p>
-                      <p className="truncate text-[10px] text-[#CBD5E0]">
+                      <p className="truncate text-[11px] font-medium text-[#CBD5E0]">
                         {card.name}
                       </p>
                     </div>

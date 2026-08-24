@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { TeaCard, GamePhase } from '../types';
 import { CHAGEE_MENU_CARDS } from '../data/chageeMenu';
 import { TeaCupVisual } from './TeaCupVisual';
-import { Play, Square, Sparkles, RefreshCw, Zap, MoveDown, Hand, GripHorizontal, Check, ArrowDown } from 'lucide-react';
+import { Play, Square, Sparkles, RefreshCw, Zap, Hand, Check, ArrowDown, MoveDown, Star } from 'lucide-react';
 import { sounds } from '../utils/audio';
 
 interface CardRouletteConveyorProps {
@@ -143,16 +143,16 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
           </span>
           <div>
             <h2 className="font-serif-sc text-sm sm:text-base md:text-lg font-bold tracking-wide text-[#F3E5AB]">
-              Top-Down Tea Roulette Conveyor (2 Cols × 3 Rows)
+              Top-Down Tea Conveyor (2 Columns × 3 Rows)
             </h2>
             <p className="text-[10px] sm:text-[11px] text-[#A0AEC0]">
               {phase === 'spinning'
-                ? 'Conveyors running top-to-bottom! Tap STOP to freeze 6 cards in 2 columns & 3 rows.'
+                ? 'Conveyors running top-to-bottom! Tap STOP to freeze 6 cards.'
                 : phase === 'stopping'
                 ? 'Decelerating top-down conveyors... Freezing 6 cards in place!'
                 : phase === 'selecting'
-                ? 'Conveyor frozen! Drag & drop cards from the 6 cards below into your recipe slots.'
-                : 'Conveyors cascade downward in 2 columns. Tap PLAY to start spinning!'}
+                ? 'Conveyor frozen! Drag or tap cards from the 6 cards below into the 4 recipe slots.'
+                : 'Conveyors cascade downward in 2 columns. Tap PLAY to start!'}
             </p>
           </div>
         </div>
@@ -190,20 +190,20 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
         )}
 
         {isFrozen ? (
-          /* FROZEN 6 CARDS IN 2 COLUMNS AND 3 ROWS */
+          /* FROZEN 6 CARDS IN 2 COLUMNS AND 3 ROWS (CLEAR VERTICAL CARD WITH TEXT AT BOTTOM OF CUP) */
           <div>
-            <div className="mb-2 flex items-center justify-between px-1">
-              <span className="font-serif-sc text-xs font-semibold text-[#D4AF37]/90 flex items-center gap-1.5">
+            <div className="mb-2.5 flex items-center justify-between px-1">
+              <span className="font-serif-sc text-xs font-bold text-[#F3E5AB] flex items-center gap-1.5">
                 <span className="inline-block h-2 w-2 rounded-full bg-[#D4AF37] animate-pulse"></span>
-                Frozen Cards (2 Columns × 3 Rows)
+                6 Frozen Tea Cards (2 Columns × 3 Rows)
               </span>
-              <span className="text-[10px] text-[#A0AEC0] flex items-center gap-1">
-                <GripHorizontal className="h-3 w-3 text-[#D4AF37]" /> Drag or tap card to place
+              <span className="text-[11px] text-[#CBD5E0] font-medium">
+                Tap card or drag to recipe slots
               </span>
             </div>
 
-            {/* Exact 2 Columns x 3 Rows Grid */}
-            <div className="grid grid-cols-2 gap-2 sm:gap-2.5">
+            {/* 2 Columns x 3 Rows Grid - Text positioned clearly at bottom of cup image */}
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
               {rolledCards.map((card, colIdx) => {
                 const placedSlot = getPlacedSlotNumber(card.id);
                 const isDraggingThis = draggedCardId === card.id;
@@ -219,55 +219,61 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
                       sounds.playCardSelect();
                       onToggleCard(card);
                     }}
-                    className={`group relative flex cursor-grab active:cursor-grabbing items-center justify-between rounded-xl border p-2 sm:p-2.5 text-left transition-all duration-200 select-none min-h-[90px] sm:min-h-[98px] ${
+                    className={`group relative flex cursor-grab active:cursor-grabbing flex-col items-center justify-between rounded-xl border p-2.5 sm:p-3 text-center transition-all duration-200 select-none ${
                       isDraggingThis ? 'opacity-40 scale-95 border-dashed border-[#D4AF37]' : ''
                     } ${
                       placedSlot !== null
-                        ? 'border-[#D4AF37] bg-gradient-to-r from-[#1C2F59] to-[#0F1B36] shadow-md shadow-[#D4AF37]/25 ring-1 ring-[#D4AF37]'
-                        : 'border-[#2D3C60] bg-gradient-to-r from-[#13203F] via-[#0D162C] to-[#090F1E] hover:border-[#D4AF37] hover:shadow-md hover:shadow-[#D4AF37]/20'
+                        ? 'border-[#D4AF37] bg-gradient-to-b from-[#1E335E] via-[#142240] to-[#0A1224] shadow-md shadow-[#D4AF37]/30 ring-2 ring-[#D4AF37]'
+                        : 'border-[#304168] bg-gradient-to-b from-[#152345] via-[#0E172E] to-[#080E1C] hover:border-[#D4AF37] hover:shadow-lg hover:shadow-[#D4AF37]/20 hover:-translate-y-0.5'
                     }`}
                   >
-                    {/* Left: Slot index + Tea Visual */}
-                    <div className="flex items-center gap-2 sm:gap-2.5 shrink-0 pointer-events-none">
-                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#0C152B] font-mono text-[9px] font-bold text-[#A0AEC0] border border-[#D4AF37]/30">
+                    {/* Top Row: Slot # Badge + Points Value */}
+                    <div className="w-full flex items-center justify-between">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#070D1C] font-mono text-[10px] font-bold text-[#E5C158] border border-[#D4AF37]/40 shadow">
                         #{colIdx + 1}
                       </span>
-                      <div className="scale-75 -my-2 -mx-1 shrink-0">
-                        <TeaCupVisual card={card} size="sm" compact />
-                      </div>
+                      <span className="flex items-center gap-0.5 rounded bg-[#070D1C]/80 px-2 py-0.5 font-mono text-[10px] font-bold text-[#E5C158] border border-[#D4AF37]/30 shadow-sm">
+                        <Star className="h-2.5 w-2.5 text-[#D4AF37] fill-current" />
+                        +{card.pointsValue}p
+                      </span>
                     </div>
 
-                    {/* Middle: Details */}
-                    <div className="min-w-0 flex-1 px-1.5 pointer-events-none">
-                      <div className="flex items-center gap-1">
-                        <p className="truncate font-serif-sc text-xs sm:text-sm font-bold text-[#FFFDF0]">
-                          {card.chineseName}
-                        </p>
-                      </div>
-                      <p className="truncate text-[9px] sm:text-[10px] text-[#CBD5E0]">
+                    {/* Middle: Tea Cup Visual Image */}
+                    <div className="my-1 flex items-center justify-center pointer-events-none scale-90 sm:scale-95">
+                      <TeaCupVisual card={card} size="sm" compact />
+                    </div>
+
+                    {/* Bottom: Text placed cleanly at the bottom of the cup image */}
+                    <div className="w-full rounded-lg bg-[#070D1C]/90 p-2 border border-[#D4AF37]/20 pointer-events-none mt-1">
+                      {/* Chinese Name - Large, High Contrast, Crystal Clear */}
+                      <p className="font-serif-sc text-sm sm:text-base font-bold text-[#FFFDF0] tracking-wide line-clamp-1">
+                        {card.chineseName}
+                      </p>
+
+                      {/* English Name - Crisp, Highly Legible */}
+                      <p className="text-xs sm:text-[13px] font-medium text-[#E2E8F0] line-clamp-1 mt-0.5">
                         {card.name}
                       </p>
-                      <div className="mt-0.5 flex items-center gap-1.5">
-                        <span className="font-mono text-[9px] font-bold text-[#E5C158]">
-                          +{card.pointsValue}p
-                        </span>
-                        <span className="text-[8px] text-[#A0AEC0] truncate">
-                          {card.topNotes.split('•')[0]}
+
+                      {/* Aroma / Tea Base Tag */}
+                      <div className="mt-1 flex items-center justify-center gap-1">
+                        <span className="rounded bg-[#1A2E56] px-1.5 py-0.5 text-[10px] font-semibold text-[#F3E5AB] truncate max-w-full">
+                          {card.teaBase}
                         </span>
                       </div>
                     </div>
 
-                    {/* Right: Status badge or drag prompt */}
-                    <div className="shrink-0 pl-1">
+                    {/* Card Footer Action / Status Indicator */}
+                    <div className="w-full mt-2">
                       {placedSlot !== null ? (
-                        <div className="flex items-center gap-0.5 rounded-full bg-[#A81D24] px-1.5 py-0.5 text-[9px] font-bold text-[#FFFDF0] shadow">
-                          <Check className="h-2.5 w-2.5 stroke-[3]" />
-                          <span>#{placedSlot}</span>
+                        <div className="flex w-full items-center justify-center gap-1 rounded-md bg-[#A81D24] py-1 text-[11px] font-bold text-white shadow">
+                          <Check className="h-3 w-3 stroke-[3]" />
+                          <span>In Recipe Slot #{placedSlot}</span>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-0.5 rounded border border-[#D4AF37]/40 bg-[#0A1224] px-1.5 py-0.5 text-[9px] text-[#D4AF37] group-hover:border-[#D4AF37] group-hover:bg-[#D4AF37]/20">
-                          <MoveDown className="h-2.5 w-2.5" />
-                          <span className="hidden xs:inline text-[8px]">Place</span>
+                        <div className="flex w-full items-center justify-center gap-1 rounded-md border border-[#D4AF37]/50 bg-[#0F1C38] py-1 text-[10px] sm:text-[11px] font-semibold text-[#F3E5AB] group-hover:bg-[#D4AF37] group-hover:text-[#0C152B] transition-colors">
+                          <MoveDown className="h-3 w-3" />
+                          <span>Tap / Drag to Place</span>
                         </div>
                       )}
                     </div>
@@ -279,22 +285,24 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
         ) : (
           /* RUNNING 2 COLUMNS OF CONVEYORS MOVING TOP-TO-BOTTOM (3 VISIBLE ROWS TALL) */
           <div>
-            <div className="mb-1.5 flex items-center justify-between px-1 text-[10px] text-[#A0AEC0]">
-              <span className="flex items-center gap-1 text-[#D4AF37]">
-                <ArrowDown className="h-3 w-3 animate-bounce" /> Cascade Column A
+            <div className="mb-2 flex items-center justify-between px-1 text-[11px] text-[#A0AEC0]">
+              <span className="flex items-center gap-1 text-[#D4AF37] font-semibold">
+                <ArrowDown className="h-3.5 w-3.5 animate-bounce" /> Cascade Track 1
               </span>
-              <span className="font-mono text-[9px] text-[#CBD5E0]">3 Visible Rows</span>
-              <span className="flex items-center gap-1 text-[#D4AF37]">
-                <ArrowDown className="h-3 w-3 animate-bounce" /> Cascade Column B
+              <span className="font-mono text-[10px] text-[#CBD5E0] bg-[#142347] px-2 py-0.5 rounded border border-[#D4AF37]/30">
+                3 Visible Rows
+              </span>
+              <span className="flex items-center gap-1 text-[#D4AF37] font-semibold">
+                <ArrowDown className="h-3.5 w-3.5 animate-bounce" /> Cascade Track 2
               </span>
             </div>
 
-            {/* 2-Column Vertical Overflow Window displaying 3 visible rows (~280px tall) */}
-            <div className="grid grid-cols-2 gap-2 sm:gap-2.5 h-[280px] sm:h-[300px] overflow-hidden rounded-lg bg-[#050A14] p-1.5 border border-[#1A284D]">
-              {/* Column 1 Vertical Conveyor */}
-              <div className="overflow-hidden relative h-full rounded-md border border-[#D4AF37]/20 bg-[#080E1C]/80">
+            {/* 2-Column Vertical Overflow Window displaying 3 visible rows (~330px tall) */}
+            <div className="grid grid-cols-2 gap-2.5 sm:gap-3 h-[330px] sm:h-[350px] overflow-hidden rounded-xl bg-[#050A14] p-2 border border-[#1A284D]">
+              {/* Column 1 Vertical Conveyor Track */}
+              <div className="overflow-hidden relative h-full rounded-lg border border-[#D4AF37]/20 bg-[#080E1C]/90 p-1">
                 <div
-                  className={`flex flex-col gap-2 ${
+                  className={`flex flex-col gap-2.5 ${
                     activeSpeed === 'hyperspeed'
                       ? 'animate-vertical-conveyor-fast'
                       : activeSpeed === 'stopping'
@@ -305,33 +313,41 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
                   {column1Cards.map((card, idx) => (
                     <div
                       key={`col1-${card.id}-${idx}`}
-                      className="flex h-[88px] shrink-0 items-center justify-between rounded-lg border border-[#D4AF37]/30 bg-gradient-to-r from-[#162547] via-[#0F1B35] to-[#0A1224] p-2 shadow-sm"
+                      className="flex h-[155px] shrink-0 flex-col items-center justify-between rounded-xl border border-[#D4AF37]/40 bg-gradient-to-b from-[#162547] via-[#0F1B35] to-[#0A1224] p-2 text-center shadow-md"
                     >
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        <div className="scale-75 -my-2 -mx-1">
-                          <TeaCupVisual card={card} size="sm" compact />
-                        </div>
+                      {/* Top Bar */}
+                      <div className="w-full flex items-center justify-between text-[10px]">
+                        <span className="rounded bg-[#A81D24] px-1.5 py-0.5 font-serif-sc font-bold text-[#FFFDF0]">
+                          CHAGEE
+                        </span>
+                        <span className="font-mono font-bold text-[#E5C158]">
+                          +{card.pointsValue}p
+                        </span>
                       </div>
-                      <div className="min-w-0 flex-1 px-1">
-                        <p className="truncate font-serif-sc text-xs font-bold text-[#FFFDF0]">
+
+                      {/* Middle: Cup Image */}
+                      <div className="scale-85 -my-1">
+                        <TeaCupVisual card={card} size="sm" compact />
+                      </div>
+
+                      {/* Bottom: Text below cup image */}
+                      <div className="w-full rounded-md bg-[#070D1C]/90 p-1.5 border border-[#D4AF37]/20">
+                        <p className="truncate font-serif-sc text-xs sm:text-sm font-bold text-[#FFFDF0]">
                           {card.chineseName}
                         </p>
-                        <p className="truncate text-[8px] text-[#CBD5E0]">
+                        <p className="truncate text-[10px] sm:text-xs font-medium text-[#E2E8F0]">
                           {card.name}
                         </p>
                       </div>
-                      <span className="font-mono text-[9px] font-bold text-[#E5C158] shrink-0">
-                        +{card.pointsValue}p
-                      </span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Column 2 Vertical Conveyor */}
-              <div className="overflow-hidden relative h-full rounded-md border border-[#D4AF37]/20 bg-[#080E1C]/80">
+              {/* Column 2 Vertical Conveyor Track */}
+              <div className="overflow-hidden relative h-full rounded-lg border border-[#D4AF37]/20 bg-[#080E1C]/90 p-1">
                 <div
-                  className={`flex flex-col gap-2 ${
+                  className={`flex flex-col gap-2.5 ${
                     activeSpeed === 'hyperspeed'
                       ? 'animate-vertical-conveyor-alt-fast'
                       : activeSpeed === 'stopping'
@@ -342,24 +358,32 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
                   {column2Cards.map((card, idx) => (
                     <div
                       key={`col2-${card.id}-${idx}`}
-                      className="flex h-[88px] shrink-0 items-center justify-between rounded-lg border border-[#D4AF37]/30 bg-gradient-to-r from-[#162547] via-[#0F1B35] to-[#0A1224] p-2 shadow-sm"
+                      className="flex h-[155px] shrink-0 flex-col items-center justify-between rounded-xl border border-[#D4AF37]/40 bg-gradient-to-b from-[#162547] via-[#0F1B35] to-[#0A1224] p-2 text-center shadow-md"
                     >
-                      <div className="flex items-center gap-1.5 shrink-0">
-                        <div className="scale-75 -my-2 -mx-1">
-                          <TeaCupVisual card={card} size="sm" compact />
-                        </div>
+                      {/* Top Bar */}
+                      <div className="w-full flex items-center justify-between text-[10px]">
+                        <span className="rounded bg-[#A81D24] px-1.5 py-0.5 font-serif-sc font-bold text-[#FFFDF0]">
+                          CHAGEE
+                        </span>
+                        <span className="font-mono font-bold text-[#E5C158]">
+                          +{card.pointsValue}p
+                        </span>
                       </div>
-                      <div className="min-w-0 flex-1 px-1">
-                        <p className="truncate font-serif-sc text-xs font-bold text-[#FFFDF0]">
+
+                      {/* Middle: Cup Image */}
+                      <div className="scale-85 -my-1">
+                        <TeaCupVisual card={card} size="sm" compact />
+                      </div>
+
+                      {/* Bottom: Text below cup image */}
+                      <div className="w-full rounded-md bg-[#070D1C]/90 p-1.5 border border-[#D4AF37]/20">
+                        <p className="truncate font-serif-sc text-xs sm:text-sm font-bold text-[#FFFDF0]">
                           {card.chineseName}
                         </p>
-                        <p className="truncate text-[8px] text-[#CBD5E0]">
+                        <p className="truncate text-[10px] sm:text-xs font-medium text-[#E2E8F0]">
                           {card.name}
                         </p>
                       </div>
-                      <span className="font-mono text-[9px] font-bold text-[#E5C158] shrink-0">
-                        +{card.pointsValue}p
-                      </span>
                     </div>
                   ))}
                 </div>
@@ -370,7 +394,7 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
       </div>
 
       {/* Action Control Button Bar */}
-      <div className="mt-3 flex flex-col items-center justify-center">
+      <div className="mt-3.5 flex flex-col items-center justify-center">
         {phase === 'spinning' ? (
           <button
             id="stop-spinning-btn"
@@ -380,7 +404,7 @@ export const CardRouletteConveyor: React.FC<CardRouletteConveyorProps> = ({
             <Square className="h-5 w-5 fill-current text-white animate-pulse" />
             <span className="font-cinzel tracking-widest">STOP CONVEYOR!</span>
             <span className="rounded bg-white/20 px-2 py-0.5 text-xs font-semibold uppercase">
-              Freeze 2×3 Grid
+              Freeze 6 Cards (2×3)
             </span>
           </button>
         ) : phase === 'stopping' ? (
